@@ -65,34 +65,67 @@ const FLAG_MAP = {
 
 const getFlag = (teamName) => FLAG_MAP[teamName] || '⚽';
 
-// --- Initial Mock Data ---
-const INITIAL_MATCHES = [
-  { id: 'm1', stage: 'Group A', homeTeam: 'Mexico', awayTeam: 'South Africa', startTime: '2026-06-11T12:00:00Z', homeScore: 2, awayScore: 0, status: 'finished' },
-  { id: 'm2', stage: 'Group A', homeTeam: 'South Korea', awayTeam: 'Czechia', startTime: '2026-06-11T19:00:00Z', homeScore: 2, awayScore: 1, status: 'finished' },
-  { id: 'm3', stage: 'Group B', homeTeam: 'Canada', awayTeam: 'Bosnia', startTime: '2026-06-12T12:00:00Z', homeScore: 1, awayScore: 1, status: 'finished' },
-  { id: 'm4', stage: 'Group D', homeTeam: 'USA', awayTeam: 'Paraguay', startTime: '2026-06-12T18:00:00Z', homeScore: 4, awayScore: 1, status: 'finished' },
-  { id: 'm5', stage: 'Group B', homeTeam: 'Qatar', awayTeam: 'Switzerland', startTime: '2026-06-13T12:00:00Z', homeScore: 1, awayScore: 1, status: 'finished' },
-  { id: 'm6', stage: 'Group C', homeTeam: 'Brazil', awayTeam: 'Morocco', startTime: '2026-06-13T15:00:00Z', homeScore: 1, awayScore: 1, status: 'finished' },
-  { id: 'm7', stage: 'Group C', homeTeam: 'Scotland', awayTeam: 'Haiti', startTime: '2026-06-13T18:00:00Z', homeScore: 1, awayScore: 0, status: 'finished' },
-  { id: 'm8', stage: 'Group D', homeTeam: 'Australia', awayTeam: 'Türkiye', startTime: '2026-06-13T21:00:00Z', homeScore: 2, awayScore: 0, status: 'finished' },
-  { id: 'm9', stage: 'Group E', homeTeam: 'Germany', awayTeam: 'Curaçao', startTime: '2026-06-14T12:00:00Z', homeScore: 7, awayScore: 1, status: 'finished' },
-  { id: 'm10', stage: 'Group F', homeTeam: 'Netherlands', awayTeam: 'Japan', startTime: '2026-06-14T15:00:00Z', homeScore: 2, awayScore: 2, status: 'finished' },
-  { id: 'm11', stage: 'Group E', homeTeam: 'Ivory Coast', awayTeam: 'Ecuador', startTime: '2026-06-14T18:00:00Z', homeScore: 1, awayScore: 0, status: 'finished' },
-  { id: 'm12', stage: 'Group F', homeTeam: 'Sweden', awayTeam: 'Tunisia', startTime: '2026-06-14T21:00:00Z', homeScore: 5, awayScore: 1, status: 'finished' },
-  { id: 'm13', stage: 'Group H', homeTeam: 'Spain', awayTeam: 'Cape Verde', startTime: '2026-06-15T12:00:00Z', homeScore: 0, awayScore: 0, status: 'finished' },
-  { id: 'm14', stage: 'Group G', homeTeam: 'Belgium', awayTeam: 'Egypt', startTime: '2026-06-15T15:00:00Z', homeScore: 1, awayScore: 1, status: 'finished' },
-  { id: 'm15', stage: 'Group H', homeTeam: 'Saudi Arabia', awayTeam: 'Uruguay', startTime: '2026-06-15T18:00:00Z', homeScore: 1, awayScore: 1, status: 'finished' },
-  { id: 'm16', stage: 'Group G', homeTeam: 'Iran', awayTeam: 'New Zealand', startTime: '2026-06-15T21:00:00Z', homeScore: 2, awayScore: 2, status: 'finished' },
-  { id: 'm17', stage: 'Group I', homeTeam: 'France', awayTeam: 'Senegal', startTime: '2026-06-16T15:00:00Z', homeScore: 3, awayScore: 1, status: 'finished' },
-  { id: 'm18', stage: 'Group I', homeTeam: 'Iraq', awayTeam: 'Norway', startTime: '2026-06-16T18:00:00Z', homeScore: 1, awayScore: 4, status: 'finished' },
-  { id: 'm19', stage: 'Group J', homeTeam: 'Argentina', awayTeam: 'Algeria', startTime: '2026-06-16T21:00:00Z', homeScore: 3, awayScore: 0, status: 'finished' },
-  { id: 'm20', stage: 'Group J', homeTeam: 'Austria', awayTeam: 'Jordan', startTime: '2026-06-17T00:00:00Z', homeScore: 3, awayScore: 1, status: 'finished' },
-  { id: 'm21', stage: 'Group K', homeTeam: 'Portugal', awayTeam: 'DR Congo', startTime: '2026-06-17T13:00:00Z', homeScore: 1, awayScore: 1, status: 'finished' },
-  { id: 'm22', stage: 'Group L', homeTeam: 'England', awayTeam: 'Croatia', startTime: '2026-06-17T20:00:00Z', homeScore: null, awayScore: null, status: 'scheduled' },
-  { id: 'm23', stage: 'Group L', homeTeam: 'Ghana', awayTeam: 'Panama', startTime: '2026-06-17T23:00:00Z', homeScore: null, awayScore: null, status: 'scheduled' },
-  { id: 'm24', stage: 'Group K', homeTeam: 'Uzbekistan', awayTeam: 'Colombia', startTime: '2026-06-18T02:00:00Z', homeScore: null, awayScore: null, status: 'scheduled' },
-  { id: 'k1', stage: 'Round of 32', homeTeam: 'Winner Grp A', awayTeam: '3rd Grp C/E/F', startTime: '2026-06-28T16:00:00Z', homeScore: null, awayScore: null, status: 'scheduled' }
-];
+// --- Tournament Structure ---
+// The 12 groups (A–L), four teams each, taken from the team list above.
+const GROUPS = {
+  A: ['Mexico', 'South Africa', 'South Korea', 'Czechia'],
+  B: ['Canada', 'Bosnia', 'Qatar', 'Switzerland'],
+  C: ['Brazil', 'Morocco', 'Scotland', 'Haiti'],
+  D: ['USA', 'Paraguay', 'Australia', 'Türkiye'],
+  E: ['Germany', 'Curaçao', 'Ivory Coast', 'Ecuador'],
+  F: ['Netherlands', 'Japan', 'Sweden', 'Tunisia'],
+  G: ['Belgium', 'Egypt', 'Iran', 'New Zealand'],
+  H: ['Spain', 'Cape Verde', 'Saudi Arabia', 'Uruguay'],
+  I: ['France', 'Senegal', 'Iraq', 'Norway'],
+  J: ['Argentina', 'Algeria', 'Austria', 'Jordan'],
+  K: ['Portugal', 'DR Congo', 'Uzbekistan', 'Colombia'],
+  L: ['England', 'Croatia', 'Ghana', 'Panama'],
+};
+
+// Build every group-stage fixture: 12 groups × 3 matchdays × 2 games = 72.
+// A 4-team round robin: each team plays the other three exactly once.
+// IDs are deterministic (gs_<group>_<matchday>_<game>) so re-seeding never
+// creates duplicates — it just overwrites the same fixtures.
+function buildGroupStage() {
+  const MATCHDAYS = [
+    { md: 1, base: '2026-06-11', pairs: [[0, 1], [2, 3]] },
+    { md: 2, base: '2026-06-18', pairs: [[0, 2], [3, 1]] },
+    { md: 3, base: '2026-06-25', pairs: [[3, 0], [1, 2]] },
+  ];
+  const out = [];
+  Object.keys(GROUPS).forEach((g, gi) => {
+    const teams = GROUPS[g];
+    const dayInWindow = Math.floor(gi / 4); // spread the 12 groups across 3 days
+    const hour = 12 + (gi % 4) * 3;          // stagger kickoffs: 12/15/18/21 UTC
+    MATCHDAYS.forEach(({ md, base, pairs }) => {
+      pairs.forEach((pair, pIdx) => {
+        const start = new Date(`${base}T00:00:00Z`);
+        start.setUTCDate(start.getUTCDate() + dayInWindow);
+        start.setUTCHours(hour + pIdx, 0, 0, 0);
+        out.push({
+          id: `gs_${g}_${md}_${pIdx + 1}`,
+          stage: `Group ${g}`,
+          homeTeam: teams[pair[0]],
+          awayTeam: teams[pair[1]],
+          startTime: start.toISOString(),
+          homeScore: null,
+          awayScore: null,
+          status: 'scheduled',
+        });
+      });
+    });
+  });
+  return out;
+}
+
+// The full group-stage schedule. Used to seed an empty database, and the
+// Admin panel can reload it on demand.
+const INITIAL_MATCHES = buildGroupStage();
+
+// --- Admin ---
+// The account allowed to see the Admin tab. Whoever registers this name owns
+// it (protected by their PIN), so claim it before sharing the app.
+const ADMIN_ACCOUNT_ID = 'admin';
 
 // --- Core Game Logic ---
 function getPoints(predHome, predAway, actualHome, actualAway) {
@@ -443,6 +476,22 @@ const AdminPanel = ({ matches, users, predictions, globalSettings }) => {
   const [editHome, setEditHome] = useState('');
   const [editAway, setEditAway] = useState('');
   const [isSavingEdit, setIsSavingEdit] = useState(false);
+  const [confirmSeed, setConfirmSeed] = useState(false);
+  const [isSeeding, setIsSeeding] = useState(false);
+
+  const handleLoadGroupStage = async () => {
+    setIsSeeding(true);
+    const matchesRef = collection(db, 'artifacts', appId, 'public', 'data', 'matches');
+    // Clear the current schedule, then write the full clean group stage.
+    for (const m of matches) {
+      await deleteDoc(doc(matchesRef, m.id));
+    }
+    for (const m of buildGroupStage()) {
+      await setDoc(doc(matchesRef, m.id), m);
+    }
+    setIsSeeding(false);
+    setConfirmSeed(false);
+  };
 
   useEffect(() => {
     if (selectedUser && selectedMatch) {
@@ -503,6 +552,26 @@ const AdminPanel = ({ matches, users, predictions, globalSettings }) => {
         >
            {globalSettings?.disableLocks ? <><Lock size={16}/> Re-enable Time Locks</> : <><Lock size={16} className="opacity-50"/> Unlock All Matches</>}
         </button>
+      </div>
+
+      <div className="bg-white p-6 rounded-3xl shadow-sm border border-slate-200 mb-6">
+         <h3 className="font-bold text-slate-800 border-b border-slate-100 pb-3 mb-4 flex items-center gap-2"><CalendarDays size={18} className="text-indigo-500" /> Schedule Tools</h3>
+         <p className="text-sm text-slate-500 font-medium mb-4 leading-relaxed">Load the complete group stage — all 12 groups, 72 matches, set to "scheduled" so everyone can predict them. This replaces the current schedule.</p>
+         {confirmSeed ? (
+           <div className="flex flex-wrap items-center gap-3 bg-amber-50 border border-amber-200 rounded-2xl p-4">
+             <span className="text-sm font-bold text-amber-800">This wipes the current matches and loads a fresh group stage. Continue?</span>
+             <div className="flex gap-2 ml-auto">
+               <button onClick={handleLoadGroupStage} disabled={isSeeding} className="bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold px-5 py-2.5 rounded-xl transition-colors">
+                 {isSeeding ? 'Loading...' : 'Yes, load it'}
+               </button>
+               <button onClick={() => setConfirmSeed(false)} disabled={isSeeding} className="bg-slate-200 hover:bg-slate-300 text-slate-700 text-sm font-bold px-5 py-2.5 rounded-xl transition-colors">Cancel</button>
+             </div>
+           </div>
+         ) : (
+           <button onClick={() => setConfirmSeed(true)} className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-5 rounded-xl transition-all shadow-md flex items-center gap-2">
+             <CalendarDays size={18} /> Load Full Group Stage
+           </button>
+         )}
       </div>
 
       <div className="bg-white p-6 rounded-3xl shadow-sm border border-slate-200 mb-6 space-y-4">
@@ -831,6 +900,7 @@ export default function App() {
   const currentUserDoc = users.find(u => u.uid === activeAccountId);
   const displayName = currentUserDoc?.displayName || 'Player';
   const user = { uid: activeAccountId, displayName };
+  const isAdmin = activeAccountId === ADMIN_ACCOUNT_ID;
 
   return (
     <div className="min-h-screen bg-slate-50 font-sans selection:bg-indigo-200 text-slate-800">
@@ -858,7 +928,7 @@ export default function App() {
          {activeTab === 'matches' && <MatchesTab matches={matches} predictions={predictions} user={user} onSavePrediction={handleSavePrediction} disableLocks={globalSettings?.disableLocks} />}
          {activeTab === 'leaderboard' && <LeaderboardTab users={users} predictions={predictions} matches={matches} currentUser={user} />}
          {activeTab === 'rules' && <RulesTab />}
-         {activeTab === 'admin' && <AdminPanel matches={matches} users={users} predictions={predictions} globalSettings={globalSettings} />}
+         {activeTab === 'admin' && isAdmin && <AdminPanel matches={matches} users={users} predictions={predictions} globalSettings={globalSettings} />}
          {activeTab === 'profile' && <ProfileTab user={user} onLogout={handleLogout} />}
       </main>
       
@@ -869,7 +939,7 @@ export default function App() {
             <NavButton icon={<Trophy size={22}/>} label="Standings" active={activeTab === 'leaderboard'} onClick={()=>setActiveTab('leaderboard')} />
             <NavButton icon={<Info size={22}/>} label="Rules" active={activeTab === 'rules'} onClick={()=>setActiveTab('rules')} />
             <NavButton icon={<User size={22}/>} label="Profile" active={activeTab === 'profile'} onClick={()=>setActiveTab('profile')} />
-            <NavButton icon={<Settings size={22}/>} label="Admin" active={activeTab === 'admin'} onClick={()=>setActiveTab('admin')} />
+            {isAdmin && <NavButton icon={<Settings size={22}/>} label="Admin" active={activeTab === 'admin'} onClick={()=>setActiveTab('admin')} />}
          </div>
       </nav>
     </div>
